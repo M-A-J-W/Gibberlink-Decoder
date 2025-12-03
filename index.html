@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gibberlink Decoder – Waver-compatible (Single-File, Worker, UX Polished)</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="wrap">
+  <h1>Gibberlink Decoder — Waver-compatible (polished UI)</h1>
+
+  <div class="card" role="region" aria-label="Audio Decoder">
+    <!-- Upload area: accessible and full-width -->
+    <div class="drop" id="drop" tabindex="0" 
+         role="button"
+         aria-label="Drop audio file here or choose"
+         aria-describedby="dropDescription">
+      <div>
+        <div style="font-size:18px;font-weight:800" id="dropDescription">Drop file here</div>
+        <div class="small" style="margin-top:8px" aria-hidden="true">or</div>
+        <div class="row" style="margin-top:12px">
+          <!-- File input with improved accessibility -->
+          <label class="pill" id="chooseLbl" role="button">
+            <span aria-hidden="true">📁</span> 
+            Choose file 
+            <input id="fileInput" 
+                   type="file" 
+                   accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm"
+                   aria-label="Choose audio file"></label>
+
+          <!-- Start decode and cancel buttons -->
+          <button id="btnDecode">▶ Decode</button>
+          <button id="btnCancel" class="secondary" title="Cancel running decode">✖ Cancel</button>
+        </div>
+
+        <div class="controls-row" style="margin-top:12px">
+          <!-- Recording controls. keep simple and clear -->
+          <button id="btnRecWebm">🎙 Record (WebM/Opus)</button>
+          <button id="btnRecWav">🎙 Record (WAV/PCM)</button>
+        </div>
+
+        <!-- Decoding options: compact pill-style controls -->
+        <div class="ctrls" style="margin-top:12px">
+          <label class="ctrl">Protocol
+            <select id="protocol">
+              <option value="audible">Audible (F0 = 1875 Hz)</option>
+              <option value="ultra">Ultrasound (F0 = 15000 Hz)</option>
+            </select>
+          </label>
+
+          <label class="ctrl"><input type="checkbox" id="precise"> 🔬 Precise (disable AGC/NS)</label>
+
+          <label class="ctrl">Smoothing
+            <input type="range" id="smooth" min="0" max="100" value="50">
+            <span id="smoothVal" class="small">50%</span>
+          </label>
+
+          <label class="ctrl">Decoder
+            <select id="decoder">
+              <option value="viterbi">🛡️ Viterbi (robust)</option>
+              <option value="voting">⚡ Voting (fast)</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="small" style="margin-top:10px">6×16 MFSK (dF = 46.875 Hz). Mono mixdown, sample-rate scaled windows. Output: decoded bytes (UTF-8 if valid, otherwise hex). Automatic CRC detection.</div>
+      </div>
+    </div>
+
+    <!-- Progress bar + ARIA-friendly status for assistive tech -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-row">
+        <progress id="progress" value="0" max="100"></progress>
+        <span id="progressText" class="status">Ready</span>
+      </div>
+    </div>
+
+    <!-- File and audio metadata -->
+    <div class="meta">
+      <div class="box" id="fileInfo">File: —</div>
+      <div class="box" id="audioInfo">Audio: —</div>
+    </div>
+
+    <h3 style="margin:14px 0 8px">Output</h3>
+    <div id="out">—</div>
+
+    <div style="margin-top:10px">
+      <button id="btnCopyOut">📋 Copy</button>
+      <button id="btnDownloadHex" class="ghost">⬇ Download Hex</button>
+    </div>
+
+    <h4 style="margin:12px 0 8px">Hex (selected candidate)</h4>
+    <div id="hex">—</div>
+
+    <h4 style="margin:12px 0 8px">Candidates (Top 12)</h4>
+    <div id="cands">—</div>
+
+    <!-- Live visualization canvas -->
+    <canvas id="liveCanvas" aria-label="Live visualisation"></canvas>
+
+    <!-- Simple spectrum canvas (legacy small spectrum) -->
+    <canvas id="spec"></canvas>
+
+    <div class="viz-controls">
+      <button id="btnPlay" class="secondary">▶ Play</button>
+      <div class="small" id="vizInfo">Visualisation: idle</div>
+    </div>
+
+    <div class="diag" id="diag">
+      <div style="font-weight:800;margin-bottom:8px">Diagnostics & Self-Tests</div>
+      <div id="diagText">Not yet executed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- small toast + accessible status element -->
+<div id="toast" class="toast" style="display:none"></div>
+<span id="srStatus" role="status" aria-live="polite" style="position:absolute;left:-9999px"></span>
+
+<script src="script.js"></script>
+</body>
+</html>
