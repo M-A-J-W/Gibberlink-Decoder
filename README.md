@@ -1,6 +1,8 @@
 # Gibberlink-Decoder
 
-# Audio Recorder & Player
+# Audio Recorder & Decoder
+
+# Code gerne benutzen
 
 Browserbasiertes Tool zum **Aufnehmen und Abspielen von Audio** mit Live-Fortschritt. Unterstützt **Drag & Drop**, Datei-Upload und Aufnahme in **WebM** oder **WAV**.
 
