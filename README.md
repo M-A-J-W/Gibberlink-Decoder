@@ -24,4 +24,4 @@ Browserbasiertes Tool zum **Aufnehmen und Abspielen von Audio** mit Live-Fortsch
 * Moderner Browser mit `AudioContext`, `MediaRecorder` und `getUserMedia`.
 * Keine zusätzlichen Bibliotheken nötig.
 
-# ( erstellt mit ChatGPT )
+# ( erstellt mit ChatGPT )...
